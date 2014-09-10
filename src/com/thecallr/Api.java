@@ -83,7 +83,7 @@ public class Api {
 			url = new URL(API_URL);
 		} catch (MalformedURLException e) {
 			throw new ThecallrClientException("INVALID_API_URL", -1, null);
-        }
+		}
 
 		// Proxy support
 		if (this._config != null && this._config.get("proxy") != null) {
