@@ -95,12 +95,12 @@ public class Api {
 				if (tmp != null) {
 					final String[] data = tmp.split(":");
 					Authenticator authenticator = new Authenticator() {
-				        public PasswordAuthentication getPasswordAuthentication() {
-				            return (new PasswordAuthentication(data[0], data[1].toCharArray()));
-				        }
-				    };
-				    Authenticator.setDefault(authenticator);
-				    tmp = null;
+						public PasswordAuthentication getPasswordAuthentication() {
+							return (new PasswordAuthentication(data[0], data[1].toCharArray()));
+						}
+					};
+					Authenticator.setDefault(authenticator);
+					tmp = null;
 				}
 
 				proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy_uri.getHost(), proxy_uri.getPort()));
