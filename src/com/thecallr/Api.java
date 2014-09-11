@@ -4,7 +4,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.google.gson.Gson;
 
-import java.util.Base64;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -24,6 +23,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.xml.bind.DatatypeConverter;
 
 
 public class Api {
@@ -83,7 +83,7 @@ public class Api {
 			url = new URL(API_URL);
 		} catch (MalformedURLException e) {
 			throw new ThecallrClientException("INVALID_API_URL", -1, null);
-		}
+        }
 
 		// Proxy support
 		if (this._config != null && this._config.get("proxy") != null) {
@@ -95,12 +95,12 @@ public class Api {
 				if (tmp != null) {
 					final String[] data = tmp.split(":");
 					Authenticator authenticator = new Authenticator() {
-						public PasswordAuthentication getPasswordAuthentication() {
-							return (new PasswordAuthentication(data[0], data[1].toCharArray()));
-						}
-					};
-					Authenticator.setDefault(authenticator);
-					tmp = null;
+				        public PasswordAuthentication getPasswordAuthentication() {
+				            return (new PasswordAuthentication(data[0], data[1].toCharArray()));
+				        }
+				    };
+				    Authenticator.setDefault(authenticator);
+				    tmp = null;
 				}
 
 				proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy_uri.getHost(), proxy_uri.getPort()));
@@ -112,8 +112,7 @@ public class Api {
 		}
 
 		// encode credentials to base64 Basic Auth format
-		tmp = this._login + ":" + this._password;
-		tmp = (String) Base64.getEncoder().encodeToString(tmp.getBytes());
+		tmp = (String) DatatypeConverter.printBase64Binary((this._login + ":" + this._password).getBytes());
 
 		try {
 			postDataBytes = gson.toJson(createObject(method, params, id)).getBytes("UTF-8");
