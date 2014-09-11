@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import com.google.gson.JsonElement;
-import com.thecallr.*;
+
+import com.thecallr.Api;
+import com.thecallr.exceptions.ThecallrException;
 
 public class Quickstart {
 

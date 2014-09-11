@@ -1,4 +1,4 @@
-package com.thecallr;
+package com.thecallr.exceptions;
 
 public class ThecallrException extends Exception {
 	public int					code;

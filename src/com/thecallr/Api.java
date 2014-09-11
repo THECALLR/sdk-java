@@ -1,18 +1,18 @@
 package com.thecallr;
 
+import com.thecallr.exceptions.*;
+
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
-
 import java.net.Authenticator;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
@@ -23,8 +23,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.xml.bind.DatatypeConverter;
-
 
 public class Api {
 	private final String					API_URL 	= "https://api.thecallr.com/";
@@ -33,6 +31,7 @@ public class Api {
 	private Hashtable<String, String>		_config 	= null;
 
 	/**
+	 * Constructor
 	 * @param String login
 	 * @param String password
 	 * @param Hashtable<String, String> config
@@ -45,6 +44,7 @@ public class Api {
 	
 	// overload Api constructor for optional parameters
 	/**
+	 * Constructor
 	 * @param String login
 	 * @param String password
 	 */
@@ -54,6 +54,11 @@ public class Api {
 	}
 
 	// Send a request to THECALLR webservice
+	/**
+	 * call
+	 * @param String methods
+	 * @param ... params
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public JsonElement						call(String method, Object... params) throws ThecallrException, ThecallrClientException {
 		ArrayList array = new ArrayList();
@@ -65,6 +70,12 @@ public class Api {
 	}
 
 	// Send a request to THECALLR webservice
+	/**
+	 * send
+	 * @param String method
+	 * @param ArrayList params
+	 * @param int id
+	 */
 	@SuppressWarnings("rawtypes")
 	public JsonElement						send(String method, ArrayList params, int id) throws ThecallrException, ThecallrClientException {
 		URL									url 			= null;
@@ -112,7 +123,7 @@ public class Api {
 		}
 
 		// encode credentials to base64 Basic Auth format
-		tmp = (String) DatatypeConverter.printBase64Binary((this._login + ":" + this._password).getBytes());
+		tmp = javax.xml.bind.DatatypeConverter.printBase64Binary((this._login + ":" + this._password).getBytes());
 
 		try {
 			postDataBytes = gson.toJson(createObject(method, params, id)).getBytes("UTF-8");
@@ -142,6 +153,7 @@ public class Api {
 				response.append('\r');
 			}
 			reader.close();
+			in.close();
 			return parseResponse(response.toString());
 		} catch (IOException e) {
 			throw new ThecallrClientException("ERROR_IN_REQUEST", -1, e.getMessage());
@@ -154,6 +166,10 @@ public class Api {
 	
 	// overload send method for optional parameters
 	@SuppressWarnings("rawtypes")
+	/**
+	 * @param String method
+	 * @param Arraylist params
+	 */
 	public JsonElement						send(String method, ArrayList params) throws ThecallrException, ThecallrClientException {
 		return send(method, params, 0);
 	}
