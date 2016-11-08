@@ -4,14 +4,11 @@ sdk-java
 SDK in Java for THECALLR API
 
 ## Dependencies
-Thecallr API is in JSON which need to be parsed.
+The CALLR API is in JSON which need to be parsed.
 This SDK is based on google-gson to parse json.
-So it need to be added as well as our SDK in you project (see [jars](jars/) folder).
+So it need to be added as well as our SDK in you project see [https://github.com/google/gson](https://github.com/google/gson) for more information.
 
-See https://code.google.com/p/google-gson/ for more information on google-gson.
-
-The [jars](jars/) folder contains the jar of Thecallr SDK and the version
-of google-gson which was used to build this SDK.
+The [jars](jars/) folder contains the jar of the CALLR SDK.
 
 ## Basic Example (Send SMS)
 See full example in [samples](samples/)
@@ -24,14 +21,14 @@ Hashtable<String, Object> param = new Hashtable<String, Object>();
 param.put("flash_message", false);
 
 // 1. "call" method: each parameter of the method as an argument
-result = tc.call("sms.send", "THECALLR", "+33123456789", "Hello, world", param);
+result = tc.call("sms.send", "SMS", "+33123456789", "Hello, world", param);
 
 // "sms.send" API method return a string so it need to be converted.
 System.out.println(result.getAsString());
 
 // 2. "send" method: parameter of the method is an array
 ArrayList array = new ArrayList();
-array.add("THECALLR");
+array.add("SMS");
 array.add("+33123456789");
 array.add("Hello, world");
 array.add(param);

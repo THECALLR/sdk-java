@@ -5,8 +5,8 @@ import java.util.Hashtable;
 
 import com.google.gson.JsonElement;
 
-import com.thecallr.Api;
-import com.thecallr.exceptions.ThecallrException;
+import com.callr.Api;
+import com.callr.exceptions.CallrException;
 
 public class Quickstart {
 
@@ -25,7 +25,7 @@ public class Quickstart {
 			param.put("flash_message", false);
 
 //			1. "call" method: each parameter of the method as an argument
-			result = tc.call("sms.send", "THECALLR", "+33123456789", "Hello, world", param);
+			result = tc.call("sms.send", "SMS", "+33123456789", "Hello, world", param);
 
 //			"sms.send" API method return a string so it need to be converted.
 			System.out.println(result.getAsString());
@@ -41,7 +41,7 @@ public class Quickstart {
 
 //			2. "send" method: parameter of the method is an array
 			ArrayList array = new ArrayList();
-			array.add("THECALLR");
+			array.add("SMS");
 			array.add("+33123456789");
 			array.add("Hello, world");
 			array.add(param);
@@ -50,10 +50,9 @@ public class Quickstart {
 
 			System.out.println(result.getAsString());
 			
-		} catch (ThecallrException e) {
+		} catch (CallrException e) {
 			System.out.println(e.getMessage());
 			System.out.println(e.data);
 		}
 	}
-
 }
