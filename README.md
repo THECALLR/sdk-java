@@ -1,12 +1,12 @@
 sdk-java
 ========
 
-SDK in Java for THECALLR API
+CALLR Java SDK
 
 ## Dependencies
-The CALLR API is in JSON which need to be parsed.
-This SDK is based on google-gson to parse json.
-So it need to be added as well as our SDK in you project see [https://github.com/google/gson](https://github.com/google/gson) for more information.
+The CALLR API uses JSON-RPC which needs to be parsed, google-gson is used for this task and 
+needs to be included in your classes, please see [https://github.com/google/gson](https://github.com/google/gson) 
+for more information.
 
 The [jars](jars/) folder contains the jar of the CALLR SDK.
 
