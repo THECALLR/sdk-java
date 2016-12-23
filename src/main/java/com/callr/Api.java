@@ -25,7 +25,8 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class Api {
-	private final String					API_URL 	= "https://api.thecallr.com/";
+	private final String					SDK_VERSION = "1.2";
+	private String							_apiUrl 	= "https://api.thecallr.com/";
 	private String							_login 		= null;
 	private String							_password 	= null;
 	private Hashtable<String, String>		_config 	= null;
@@ -52,6 +53,14 @@ public class Api {
 		_login = login;
 		_password = password;
 	}
+
+	/**
+	 * setApiUrl
+	 * @param url
+	 */
+	 public void 							setApiUrl(String url){
+		 this._apiUrl = url;
+	 }
 
 	// Send a request to CALLR webservice
 	/**
@@ -83,7 +92,7 @@ public class Api {
 		StringBuffer						response 		= null;
 		String								tmp 			= null;
 		Proxy								proxy 			= null;
-		URI									proxy_uri 		= null;
+		URI									proxyUri 		= null;
 		byte[]								postDataBytes 	= null;
 		InputStream							in 				= null;
 		DataOutputStream					out 			= null;
@@ -91,7 +100,7 @@ public class Api {
 		Gson								gson 			= new Gson();
 
 		try {
-			url = new URL(API_URL);
+			url = new URL(_apiUrl);
 		} catch (MalformedURLException e) {
 			throw new CallrClientException("INVALID_API_URL", -1, null);
         }
@@ -99,8 +108,8 @@ public class Api {
 		// Proxy support
 		if (this._config != null && this._config.get("proxy") != null) {
 			try {
-				proxy_uri = new URI(this._config.get("proxy"));
-				tmp = proxy_uri.getUserInfo();
+				proxyUri = new URI(this._config.get("proxy"));
+				tmp = proxyUri.getUserInfo();
 
 				// proxy auth
 				if (tmp != null) {
@@ -114,7 +123,7 @@ public class Api {
 				    tmp = null;
 				}
 
-				proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy_uri.getHost(), proxy_uri.getPort()));
+				proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyUri.getHost(), proxyUri.getPort()));
 			} catch (URISyntaxException e1) {
 				throw new CallrClientException("INVALID_PROXY_URL", -1, null);
 			}
@@ -131,6 +140,7 @@ public class Api {
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Content-Type", "application/json-rpc; charset=utf-8");
+			conn.setRequestProperty("User-Agent", "sdk=JAVA; sdk-version="+SDK_VERSION+"; lang-version="+System.getProperty("java.version")+"; platform="+System.getProperty("os.name"));
 			conn.setRequestProperty("charset", "utf-8");
 			conn.setRequestProperty("Authorization", "Basic " + tmp);
 			conn.setRequestProperty("Content-Length", Integer.toString(postDataBytes.length));
