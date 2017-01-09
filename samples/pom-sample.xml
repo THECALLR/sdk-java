@@ -1,0 +1,7 @@
+<dependencies>
+  <dependency>
+    <groupId>com.callr</groupId>
+    <artifactId>callr-sdk-java</artifactId>
+    <version>1.1</version>
+  </dependency>
+</dependencies>
