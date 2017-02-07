@@ -2,6 +2,6 @@
   <dependency>
     <groupId>com.callr</groupId>
     <artifactId>callr-sdk-java</artifactId>
-    <version>1.3.0</version>
+    <version>LATEST</version>
   </dependency>
 </dependencies>
