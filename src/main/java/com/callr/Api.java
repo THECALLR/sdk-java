@@ -25,8 +25,8 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class Api {
-	private final String					SDK_VERSION = "1.2";
-	private String							_apiUrl 	= "https://api.thecallr.com/";
+	private static final String				SDK_VERSION = "1.3";
+	private String							_apiUrl 	= "https://api.callr.com/json-rpc/v1.1/";
 	private String							_login 		= null;
 	private String							_password 	= null;
 	private Hashtable<String, String>		_config 	= null;
@@ -103,7 +103,7 @@ public class Api {
 			url = new URL(_apiUrl);
 		} catch (MalformedURLException e) {
 			throw new CallrClientException("INVALID_API_URL", -1, null);
-        }
+		}
 
 		// Proxy support
 		if (this._config != null && this._config.get("proxy") != null) {
@@ -115,12 +115,12 @@ public class Api {
 				if (tmp != null) {
 					final String[] data = tmp.split(":");
 					Authenticator authenticator = new Authenticator() {
-				        public PasswordAuthentication getPasswordAuthentication() {
-				            return (new PasswordAuthentication(data[0], data[1].toCharArray()));
-				        }
-				    };
-				    Authenticator.setDefault(authenticator);
-				    tmp = null;
+						public PasswordAuthentication getPasswordAuthentication() {
+							return (new PasswordAuthentication(data[0], data[1].toCharArray()));
+						}
+					};
+					Authenticator.setDefault(authenticator);
+					tmp = null;
 				}
 
 				proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyUri.getHost(), proxyUri.getPort()));
