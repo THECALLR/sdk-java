@@ -5,6 +5,7 @@ import com.callr.exceptions.*;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.google.gson.Gson;
+import org.apache.commons.codec.binary.Base64;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -25,7 +26,7 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class Api {
-	private static final String				SDK_VERSION = "1.3";
+	private static final String				SDK_VERSION = "1.4";
 	private String							_apiUrl 	= "https://api.callr.com/json-rpc/v1.1/";
 	private String							_login 		= null;
 	private String							_password 	= null;
@@ -132,7 +133,7 @@ public class Api {
 		}
 
 		// encode credentials to base64 Basic Auth format
-		tmp = javax.xml.bind.DatatypeConverter.printBase64Binary((this._login + ":" + this._password).getBytes());
+		tmp = new String(Base64.encodeBase64((this._login + ":" + this._password).getBytes()));
 
 		try {
 			postDataBytes = gson.toJson(createObject(method, params, id)).getBytes("UTF-8");

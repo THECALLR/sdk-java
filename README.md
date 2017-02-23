@@ -8,6 +8,10 @@ The CALLR API uses JSON-RPC which needs to be parsed, google-gson is used for th
 needs to be included in your classes, please see [https://github.com/google/gson](https://github.com/google/gson) 
 for more information.
 
+The apache commons codec library is also required for Base64 encoding, please see
+[https://commons.apache.org/proper/commons-codec/](https://commons.apache.org/proper/commons-codec/)
+for more information. 
+
 The [jars](jars/) folder contains the jar of the CALLR SDK.
 
 ## Basic Example (Send SMS)
