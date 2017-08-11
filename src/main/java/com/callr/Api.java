@@ -1,6 +1,7 @@
 package com.callr;
 
 import com.callr.exceptions.*;
+import com.callr.auth.*;
 
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
@@ -26,11 +27,12 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class Api {
-	private static final String				SDK_VERSION = "1.4.0";
+	private static final String				SDK_VERSION = "1.4.1";
 	private String							_apiUrl 	= "https://api.callr.com/json-rpc/v1.1/";
 	private String							_login 		= null;
 	private String							_password 	= null;
 	private Hashtable<String, String>		_config 	= null;
+	private LoginAs							_logAs  	= null;
 
 	/**
 	 * Constructor
@@ -43,7 +45,7 @@ public class Api {
 		_password = password;
 		_config = config;
 	}
-	
+
 	// overload Api constructor for optional parameters
 	/**
 	 * Constructor
@@ -62,6 +64,21 @@ public class Api {
 		 this._apiUrl = url;
 	 }
 
+	 /**
+	  * setLoginAs - set to null to clear
+	  * @param LoginAs
+	  */
+	 public void 							setLoginAs(LoginAs logAs){
+		this._logAs = logAs;
+	 }
+
+	 /**
+	  * setLoginAs overload for updating object
+	  */
+	public void 							setLoginAs(String type, String target) throws CallrClientException {
+		this._logAs = new LoginAs(type, target);
+	}
+
 	// Send a request to CALLR webservice
 	/**
 	 * call
@@ -71,7 +88,7 @@ public class Api {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public JsonElement call(String method, Object... params) throws CallrException, CallrClientException {
 		ArrayList array = new ArrayList();
-		
+
 		for (Object el : params) {
 			array.add(el);
 		}
@@ -145,6 +162,11 @@ public class Api {
 			conn.setRequestProperty("Authorization", "Basic " + tmp);
 			conn.setRequestProperty("Content-Length", Integer.toString(postDataBytes.length));
 
+			// Check for LoginAs
+			if(this._logAs != null){
+				conn.setRequestProperty("CALLR-Login-As", _logAs.toString());
+			}
+
 			// Send request
 			out = new DataOutputStream(conn.getOutputStream());
 			out.write(postDataBytes);
@@ -173,7 +195,7 @@ public class Api {
 			}
 		}
 	}
-	
+
 	// overload send method for optional parameters
 	@SuppressWarnings("rawtypes")
 	/**
@@ -198,13 +220,13 @@ public class Api {
 	// Response analysis
 	private JsonElement						parseResponse(String response) throws CallrException {
 		JsonElement			result = null;
-		
+
 		try {
 			result = new JsonParser().parse(response);
 		} catch (Exception e) {
 			throw new CallrException("INVALID_RESPONSE", -1, response);
 		}
-		
+
 		if (result != null && result.isJsonObject() && result.getAsJsonObject().has("result")) {
 			return result.getAsJsonObject().get("result");
 		} else if (result.isJsonObject() && result.getAsJsonObject().has("error")) {
