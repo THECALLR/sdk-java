@@ -4,13 +4,13 @@ sdk-java
 CALLR Java SDK
 
 ## Dependencies
-The CALLR API uses JSON-RPC which needs to be parsed, google-gson is used for this task and 
-needs to be included in your classes, please see [https://github.com/google/gson](https://github.com/google/gson) 
+The CALLR API uses JSON-RPC which needs to be parsed, google-gson is used for this task and
+needs to be included in your classes, please see [https://github.com/google/gson](https://github.com/google/gson)
 for more information.
 
 The apache commons codec library is also required for Base64 encoding, please see
 [https://commons.apache.org/proper/commons-codec/](https://commons.apache.org/proper/commons-codec/)
-for more information. 
+for more information.
 
 The [jars](jars/) folder contains the jar of the CALLR SDK.
 
@@ -40,4 +40,53 @@ array.add(param);
 result = tc.send("sms.send", array);
 
 System.out.println(result.getAsString());
+```
+
+## Authentication with Login as
+### Using login as
+```java
+// Set your credentials
+Api tc = new Api("login", "password");
+
+// Set LoginAs
+tc.setLoginAs("user", "<login>"); // available types: user, account
+                                  // available targets: <login> for type user, <hash> for type account
+
+result = tc.call("sms.send", "SMS", "+33123456789", "Hello, world", null);
+System.out.println(result.getAsString());
+...
+```
+
+### Reset login as
+```java
+// Set your credentials
+Api tc = new Api("login", "password");
+
+// Set LoginAs
+tc.setLoginAs("user", "<login>"); // available types: user, account
+                                  // available targets: <login> for type user, <hash> for type account
+
+result = tc.call("sms.send", "SMS", "+33123456789", "Hello, world", null);
+System.out.println(result.getAsString());
+...
+// Reset login as
+tc.setLoginAs(null);
+...
+```
+
+### Change login as
+```java
+// Set your credentials
+Api tc = new Api("login", "password");
+
+// Set LoginAs
+tc.setLoginAs("user", "<login>"); // available types: user, account
+                                  // available targets: <login> for type user, <hash> for type account
+
+result = tc.call("sms.send", "SMS", "+33123456789", "Hello, world", null);
+System.out.println(result.getAsString());
+...
+// Change login as
+tc.setLoginAs("account","<account hash>");
+...
 ```
