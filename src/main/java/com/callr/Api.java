@@ -51,8 +51,7 @@ public class Api {
 	 * @param password
 	 */
 	public									Api(String login, String password) {
-		_login = login;
-		_password = password;
+		this(login, password, null);
 	}
 
 	/**
