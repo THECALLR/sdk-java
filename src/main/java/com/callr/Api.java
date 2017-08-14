@@ -27,7 +27,7 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class Api {
-	private static final String				SDK_VERSION = "1.4.1";
+	private static final String				SDK_VERSION = "1.5.0";
 	private String							_apiUrl 	= "https://api.callr.com/json-rpc/v1.1/";
 	private Hashtable<String, String>		_config 	= null;
 	private LoginAs							_logAs  	= null;
