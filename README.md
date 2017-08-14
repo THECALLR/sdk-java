@@ -19,7 +19,7 @@ See full example in [samples](samples/)
 
 ```java
 // Set your credentials
-Api tc = new Api("login", "password");
+Api tc = new Api(new LoginPasswordAuth("login", "password"), null);
 
 Hashtable<String, Object> param = new Hashtable<String, Object>();
 param.put("flash_message", false);
@@ -46,7 +46,7 @@ System.out.println(result.getAsString());
 ### Using login as
 ```java
 // Set your credentials
-Api tc = new Api("login", "password");
+Api tc = new Api(new LoginPasswordAuth("login", "password"), null);
 
 // Set LoginAs
 tc.setLoginAs("user", "<login>"); // available types: user, account
@@ -60,7 +60,7 @@ System.out.println(result.getAsString());
 ### Reset login as
 ```java
 // Set your credentials
-Api tc = new Api("login", "password");
+Api tc = new Api(new LoginPasswordAuth("login", "password"), null);
 
 // Set LoginAs
 tc.setLoginAs("user", "<login>"); // available types: user, account
@@ -77,7 +77,7 @@ tc.setLoginAs(null);
 ### Change login as
 ```java
 // Set your credentials
-Api tc = new Api("login", "password");
+Api tc = new Api(new LoginPasswordAuth("login", "password"), null);
 
 // Set LoginAs
 tc.setLoginAs("user", "<login>"); // available types: user, account
@@ -88,5 +88,42 @@ System.out.println(result.getAsString());
 ...
 // Change login as
 tc.setLoginAs("account","<account hash>");
+...
+```
+---
+## Authentication methods
+### Login/Password (Basic) authentication
+* Please see [https://www.callr.com/docs/api/authentication/](https://www.callr.com/docs/api/authentication/) for more information
+
+```java
+import com.callr.auth.*;
+
+// Set your credentials
+Api tc = new Api(new LoginPasswordAuth("login", "password"), null);
+result = tc.call("sms.send", "SMS", "+33123456789", "Hello, world", null);
+...
+```
+
+### Api-Key token authentication
+* Please see [https://www.callr.com/docs/api/services/api-key](https://www.callr.com/docs/api/services/api-key) for more information
+
+```java
+import com.callr.auth.*;
+
+// Set your credentials
+Api tc = new Api(new ApiKeyAuth("987654321abcdef987654321abcdef987654321abcdef987654321abcdef987654321abcdef987654321abcdef987654321a"), null);
+result = tc.call("sms.send", "SMS", "+33123456789", "Hello, world", null);
+...
+```
+
+### User Session token authentication
+* Please see [https://www.callr.com/docs/api/services/session/](https://www.callr.com/docs/api/services/session/) for more information
+
+```java
+import com.callr.auth.*;
+
+// Set your credentials
+Api tc = new Api(new UserSessionAuth("987654321abcdef987654321abcdef987654321a"), null);
+result = tc.call("sms.send", "SMS", "+33123456789", "Hello, world", null);
 ...
 ```
