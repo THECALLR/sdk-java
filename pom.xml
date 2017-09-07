@@ -28,7 +28,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <name>Michael JACQUIN</name>
       <email>mj@callr.com</email>
       <organization>CALLR</organization>
-      <organizationUrl>http://callr.com</organizationUrl>
+      <organizationUrl>https://www.callr.com</organizationUrl>
+    </developer>
+    <developer>
+      <name>Dion MITCHELL</name>
+      <email>dion.mitchell@callr.com</email>
+      <organization>CALLR</organization>
+      <organizationUrl>https://www.callr.com</organizationUrl>
     </developer>
   </developers>
 
@@ -43,6 +49,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     <artifactId>commons-codec</artifactId>
     <version>1.10</version>
   </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
 </dependencies>
 
   <scm>
@@ -64,6 +76,17 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 
 <build>
   <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-surefire-plugin</artifactId>
+      <version>2.20</version>
+      <configuration>
+        <environmentVariables>
+          <!-- <CALLR_LOGIN></CALLR_LOGIN>
+          <CALLR_PASS></CALLR_PASS> -->
+        </environmentVariables>
+      </configuration>
+    </plugin>
     <plugin>
       <groupId>org.sonatype.plugins</groupId>
       <artifactId>nexus-staging-maven-plugin</artifactId>
