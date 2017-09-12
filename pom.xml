@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.callr</groupId>
   <artifactId>callr-sdk-java</artifactId>
-  <version>1.4.0</version>
+  <version>1.5.0</version>
   <packaging>jar</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  
+
   <name>callr-sdk-java</name>
   <description>CALLR API Java SDK</description>
   <url>http://github.com/THECALLR/sdk-java</url>
@@ -28,7 +28,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <name>Michael JACQUIN</name>
       <email>mj@callr.com</email>
       <organization>CALLR</organization>
-      <organizationUrl>http://callr.com</organizationUrl>
+      <organizationUrl>https://www.callr.com</organizationUrl>
+    </developer>
+    <developer>
+      <name>Dion MITCHELL</name>
+      <email>dion.mitchell@callr.com</email>
+      <organization>CALLR</organization>
+      <organizationUrl>https://www.callr.com</organizationUrl>
     </developer>
   </developers>
 
@@ -43,6 +49,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     <artifactId>commons-codec</artifactId>
     <version>1.10</version>
   </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
 </dependencies>
 
   <scm>
@@ -64,6 +76,17 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 
 <build>
   <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-surefire-plugin</artifactId>
+      <version>2.20</version>
+      <configuration>
+        <environmentVariables>
+          <!-- <CALLR_LOGIN></CALLR_LOGIN>
+          <CALLR_PASS></CALLR_PASS> -->
+        </environmentVariables>
+      </configuration>
+    </plugin>
     <plugin>
       <groupId>org.sonatype.plugins</groupId>
       <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -112,7 +135,14 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <goals>
        <goal>sign</goal>
       </goals>
-     </execution>
+      <configuration>
+      <!-- This is necessary for gpg to not try to use the pinentry programs -->
+        <gpgArguments>
+          <arg>--pinentry-mode</arg>
+          <arg>loopback</arg>
+        </gpgArguments>
+      </configuration>
+      </execution>
     </executions>
    </plugin>
    <plugin>

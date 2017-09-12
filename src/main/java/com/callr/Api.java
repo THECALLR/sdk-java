@@ -1,6 +1,7 @@
 package com.callr;
 
 import com.callr.exceptions.*;
+import com.callr.auth.*;
 
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
@@ -26,33 +27,44 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class Api {
-	private static final String				SDK_VERSION = "1.4.0";
+	private static final String				SDK_VERSION = "1.5.0";
 	private String							_apiUrl 	= "https://api.callr.com/json-rpc/v1.1/";
-	private String							_login 		= null;
-	private String							_password 	= null;
 	private Hashtable<String, String>		_config 	= null;
+	private LoginAs							_logAs  	= null;
+	private CallrAuthentication				_auth       = null;
 
 	/**
-	 * Constructor
+	 * Default Constructor
+	 * @param auth CallrAuthentication CALLR authentication object
+	 * @param config extra configuration options
+	 */
+	public 									Api(CallrAuthentication auth, Hashtable<String, String> config){
+		this._auth = auth;
+		this._config = config;
+	}
+
+	/**
+	 * Overloaded constructor
 	 * @param login CALLR login
 	 * @param password CALLR password
 	 * @param config extra configuration options
+	 * @deprecated
 	 */
+	@Deprecated
 	public									Api(String login, String password, Hashtable<String, String> config) {
-		_login = login;
-		_password = password;
-		_config = config;
+		this(new LoginPasswordAuth(login, password), config);
 	}
-	
+
 	// overload Api constructor for optional parameters
 	/**
 	 * Constructor
 	 * @param login
 	 * @param password
+	 * @deprecated
 	 */
+	@Deprecated
 	public									Api(String login, String password) {
-		_login = login;
-		_password = password;
+		this(new LoginPasswordAuth(login, password), null);
 	}
 
 	/**
@@ -63,6 +75,21 @@ public class Api {
 		 this._apiUrl = url;
 	 }
 
+	 /**
+	  * setLoginAs - set to null to clear
+	  * @param logAs LoginAs
+	  */
+	 public void 							setLoginAs(LoginAs logAs){
+		this._logAs = logAs;
+	 }
+
+	 /**
+	  * setLoginAs overload for updating object
+	  */
+	public void 							setLoginAs(String type, String target) throws CallrClientException {
+		this._logAs = new LoginAs(type, target);
+	}
+
 	// Send a request to CALLR webservice
 	/**
 	 * call
@@ -72,7 +99,7 @@ public class Api {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public JsonElement call(String method, Object... params) throws CallrException, CallrClientException {
 		ArrayList array = new ArrayList();
-		
+
 		for (Object el : params) {
 			array.add(el);
 		}
@@ -132,9 +159,6 @@ public class Api {
 			proxy = Proxy.NO_PROXY;
 		}
 
-		// encode credentials to base64 Basic Auth format
-		tmp = new String(Base64.encodeBase64((this._login + ":" + this._password).getBytes()));
-
 		try {
 			postDataBytes = gson.toJson(createObject(method, params, id)).getBytes("UTF-8");
 			conn = (HttpsURLConnection) url.openConnection(proxy);
@@ -143,8 +167,13 @@ public class Api {
 			conn.setRequestProperty("Content-Type", "application/json-rpc; charset=utf-8");
 			conn.setRequestProperty("User-Agent", "sdk=JAVA; sdk-version="+SDK_VERSION+"; lang-version="+System.getProperty("java.version")+"; platform="+System.getProperty("os.name"));
 			conn.setRequestProperty("charset", "utf-8");
-			conn.setRequestProperty("Authorization", "Basic " + tmp);
+			conn.setRequestProperty("Authorization", this._auth.toString());
 			conn.setRequestProperty("Content-Length", Integer.toString(postDataBytes.length));
+
+			// Check for LoginAs
+			if(this._logAs != null){
+				conn.setRequestProperty("CALLR-Login-As", this._logAs.toString());
+			}
 
 			// Send request
 			out = new DataOutputStream(conn.getOutputStream());
@@ -174,7 +203,7 @@ public class Api {
 			}
 		}
 	}
-	
+
 	// overload send method for optional parameters
 	@SuppressWarnings("rawtypes")
 	/**
@@ -199,13 +228,13 @@ public class Api {
 	// Response analysis
 	private JsonElement						parseResponse(String response) throws CallrException {
 		JsonElement			result = null;
-		
+
 		try {
 			result = new JsonParser().parse(response);
 		} catch (Exception e) {
 			throw new CallrException("INVALID_RESPONSE", -1, response);
 		}
-		
+
 		if (result != null && result.isJsonObject() && result.getAsJsonObject().has("result")) {
 			return result.getAsJsonObject().get("result");
 		} else if (result.isJsonObject() && result.getAsJsonObject().has("error")) {

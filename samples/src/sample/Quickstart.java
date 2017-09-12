@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import com.google.gson.JsonElement;
 
 import com.callr.Api;
+import com.callr.auth.*;
 import com.callr.exceptions.CallrException;
 
 public class Quickstart {
@@ -19,7 +20,7 @@ public class Quickstart {
 //			options = new Hashtable();
 //			options.put("proxy", "http://foo:bar@example.com:8080");
 
-			Api tc = new Api("login", "password", options);
+			Api tc = new Api(new LoginPasswordAuth("login", "password"), options);
 
 			Hashtable<String, Object> param = new Hashtable<String, Object>();
 			param.put("flash_message", false);
@@ -49,7 +50,7 @@ public class Quickstart {
 			result = tc.send("sms.send", array);
 
 			System.out.println(result.getAsString());
-			
+
 		} catch (CallrException e) {
 			System.out.println(e.getMessage());
 			System.out.println(e.data);
