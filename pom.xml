@@ -13,7 +13,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   </properties>
 
   <name>callr-sdk-java</name>
-  <description>CALLR API Java SDK</description>
+  <description>[DEPRECATED — shutting down 2027-06-30, migrate to Callr REST API v2] Legacy Callr JSON-RPC API (v1) Java SDK. See https://docs.callr.com/reference/migrating-from-json-rpc-v1</description>
   <url>http://github.com/THECALLR/sdk-java</url>
 
   <licenses>

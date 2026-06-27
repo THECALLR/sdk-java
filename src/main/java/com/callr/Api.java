@@ -26,6 +26,14 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+/**
+ * Client for the legacy Callr JSON-RPC API (v1).
+ *
+ * @deprecated This SDK targets the legacy Callr JSON-RPC API (v1), which will be shut down on
+ *             2027-06-30. Migrate to the Callr REST API v2:
+ *             https://docs.callr.com/reference/migrating-from-json-rpc-v1
+ */
+@Deprecated
 public class Api {
 	private static final String				SDK_VERSION = "1.5.0";
 	private String							_apiUrl 	= "https://api.callr.com/json-rpc/v1.1/";
